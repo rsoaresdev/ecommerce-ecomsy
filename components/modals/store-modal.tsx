@@ -1,8 +1,11 @@
 "use client";
 
 import * as z from "zod";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 // Configure zod language
 import i18next from "i18next";
@@ -38,6 +41,8 @@ const formSchema = z.object({
 export const StoreModal = () => {
   const storeModal = useStoreModal();
 
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,8 +51,18 @@ export const StoreModal = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // TODO: Create store
+    try {
+      setLoading(true);
+
+      const response = await axios.post("/api/stores", values);
+      // console.log(response.data);
+      toast.success("Loja criada com sucesso!")
+    } catch (error) {
+      // console.log(error);
+      toast.error("Algo correu mal ao criar a loja.")
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,7 +83,11 @@ export const StoreModal = () => {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Insira o nome da sua loja" {...field} />
+                      <Input
+                        disabled={loading}
+                        placeholder="Insira o nome da sua loja"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -76,10 +95,16 @@ export const StoreModal = () => {
               />
 
               <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-                <Button variant={"outline"} onClick={storeModal.onClose}>
+                <Button
+                  disabled={loading}
+                  variant={"outline"}
+                  onClick={storeModal.onClose}
+                >
                   Cancelar
                 </Button>
-                <Button type="submit">Continuar</Button>
+                <Button disabled={loading} type="submit">
+                  Continuar
+                </Button>
               </div>
             </form>
           </Form>

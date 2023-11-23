@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import translations from "@/i18n/clerk"; // File with localizations strings of Clerk
 import { ModalProvider } from "@/providers/modal-provider";
+import { ToasterProvider } from "@/providers/toast-provider";
 
 import "./globals.css";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
     <ClerkProvider localization={translations}>
       <html lang="pt">
         <body className={inter.className}>
+          <ToasterProvider />
           <ModalProvider />
           {children}
           </body>
