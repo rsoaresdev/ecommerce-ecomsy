@@ -1,9 +1,19 @@
 "use client";
 
-import { Modal } from "../ui/modal";
+import { useStoreModal } from "@/hooks/use-store-modal";
+import { Modal } from "@/components/ui/modal";
 
 export const StoreModal = () => {
-    // <Modal title="a" description="b" >
-        // Future Create Store Form
-    //</Modal>
-}
+  const storeModal = useStoreModal();
+
+  return (
+    <Modal
+      title="Abrir uma nova loja"
+      description="Crie a sua loja virtual em minutos e alcance novos clientes."
+      isOpen={storeModal.isOpen}
+      onClose={storeModal.onClose}
+    >
+      Future Create Store Form
+    </Modal>
+  );
+};

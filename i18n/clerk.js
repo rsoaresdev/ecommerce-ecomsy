@@ -99,8 +99,8 @@ const translations = {
         title: "Entrando...",
       },
       verifiedSwitchTab: {
-      title: "E-mail verificado com sucesso",
-      subtitle: "Volte para a nova aba que foi aberta para continuar",
+        title: "E-mail verificado com sucesso",
+        subtitle: "Volte para a nova aba que foi aberta para continuar",
         subtitleNewTab: "Volte para a aba anterior para continuar",
       },
     },
@@ -427,8 +427,7 @@ const translations = {
       successMessage: "{{identifier}} foi adicionado à sua conta.",
       infoText:
         "Um SMS contendo um link de verificação será enviado para este telemóvel.",
-      infoText__secondary:
-        "Poderá haver cobranças extras pelo envio do SMS.",
+      infoText__secondary: "Poderá haver cobranças extras pelo envio do SMS.",
       removeResource: {
         title: "Remover telemóvel",
         messageLine1: "{{identifier}} será removido desta conta.",
@@ -736,7 +735,7 @@ const translations = {
     title: "Criar organização",
     formButtonSubmit: "Criar organização",
     invitePage: {
-      formButtonReset: "Pular",
+      formButtonReset: "Ignorar",
     },
   },
   organizationList: {
@@ -757,14 +756,16 @@ const translations = {
       "Este número de telemóvel já está em uso. Por favor, tente outro.",
     form_identifier_not_found: "",
     captcha_invalid:
-      "Não foi possível se inscrever devido a falhas nas validações de segurança. Por favor, atualize a página para tentar novamente ou entre em contato com o suporte para obter mais ajuda.",
+      "Não foi possível inscrever-se devido a falhas nas validações de segurança. Por favor, atualize a página para tentar novamente ou entre em contato com o suporte para obter mais ajuda.",
     form_password_pwned:
       "Esta palavra-passe foi encontrada como parte de uma violação e não pode ser usada, por favor, tente outra palavra-passe.",
     form_username_invalid_length: "",
     form_username_invalid_character: "",
     form_param_format_invalid: "",
+    form_param_format_invalid__phone_number:
+      "O número de telemóvel deve ser válido.",
     form_param_format_invalid__email_address:
-      "O endereço de e-mail deve ser um endereço de e-mail válido.",
+      "O endereço de e-mail deve ser válido.",
     form_password_length_too_short: "",
     form_param_nil: "",
     form_code_incorrect: "",
@@ -772,7 +773,8 @@ const translations = {
     not_allowed_access: "",
     form_identifier_exists: "",
     form_password_validation_failed: "Palavra-passe incorreta",
-    form_password_not_strong_enough: "A sua palavra-passe não é forte o suficiente.",
+    form_password_not_strong_enough:
+      "A sua palavra-passe não é forte o suficiente.",
     form_password_size_in_bytes_exceeded:
       "A sua palavra-passe excedeu o número máximo de bytes permitidos, por favor, encurte-a ou remova alguns caracteres especiais.",
     passwordComplexity: {
@@ -788,10 +790,11 @@ const translations = {
       notEnough: "A sua palavra-passe não é forte o suficiente.",
       couldBeStronger:
         "A sua palavra-passe funciona, mas poderia ser mais forte. Tente adicionar mais caracteres.",
-      goodPassword: "A sua palavra-passe atende a todos os requisitos necessários.",
+      goodPassword:
+        "A sua palavra-passe atende a todos os requisitos necessários.",
       warnings: {
         straightRow:
-          "Letras que vêm em sequência teclado são fáceis de adivinhar.",
+          "Letras que vêm em sequência no teclado são fáceis de adivinhar.",
         keyPattern: "Padrões curtos de teclado são fáceis de adivinhar.",
         simpleRepeat:
           'Caracteres repetidos, como "aaa" são fáceis de adivinhar.',
@@ -804,13 +807,15 @@ const translations = {
         topTen: "Esta é uma palavra-passe muito usada.",
         topHundred: "Esta é uma palavra-passe usada frequentemente.",
         common: "Esta é uma palavra-passe comumente usada.",
-        similarToCommon: "Esta é semelhante a uma palavra-passe comumente usada.",
+        similarToCommon:
+          "Esta é semelhante a uma palavra-passe comumente usada.",
         wordByItself: "Palavras simples são fáceis de adivinhar.",
-        namesByThemselves: "Nomes ou sobrenomes são fáceis de adivinhar.",
-        commonNames: "Nomes e sobrenomes comuns são fáceis de adivinhar.",
+        namesByThemselves: "Nomes ou apelidos são fáceis de adivinhar.",
+        commonNames: "Nomes e apelidos comuns são fáceis de adivinhar.",
         userInputs:
           "Não deve haver nenhum dado pessoal ou relacionado à página.",
-        pwned: "A sua palavra-passe foi exposta por uma violação de dados na Internet.",
+        pwned:
+          "A sua palavra-passe foi exposta numa violação de dados na Internet.",
       },
       suggestions: {
         l33t: "Evite substituições previsíveis de letras, como '@' por 'a'.",
@@ -826,11 +831,11 @@ const translations = {
         repeated: "Evite palavras e caracteres repetidos.",
         longerKeyboardPattern:
           "Use padrões de teclado mais longos e mude a direção da digitação várias vezes.",
-        anotherWord: "Adicione mais palavras que são menos comuns.",
+        anotherWord: "Adicione palavras menos comuns.",
         useWords: "Use várias palavras, mas evite frases comuns.",
         noNeed:
           "Você pode criar palavras-passes fortes sem usar símbolos, números ou letras maiúsculas.",
-        pwned: "Se você usar esta palavra-passe em outro lugar, você deve mudá-la.",
+        pwned: "Se usar esta palavra-passe noutro lugar, deve mudá-la.",
       },
     },
     form_param_max_length_exceeded__name:
@@ -838,17 +843,17 @@ const translations = {
     form_param_max_length_exceeded__first_name:
       "O primeiro nome não deve exceder 256 caracteres.",
     form_param_max_length_exceeded__last_name:
-      "O sobrenome não deve exceder 256 caracteres.",
+      "O apelido não deve exceder 256 caracteres.",
   },
   dates: {
     previous6Days:
-      "Último {{ date | weekday('pt-BR','long') }} às {{ date | timeString('pt-BR') }}",
-    lastDay: "Ontem às {{ date | timeString('pt-BR') }}",
-    sameDay: "Hoje às {{ date | timeString('pt-BR') }}",
-    nextDay: "Amanhã às {{ date | timeString('pt-BR') }}",
+      "Último {{ date | weekday('pt-PT','long') }} às {{ date | timeString('pt-PT') }}",
+    lastDay: "Ontem às {{ date | timeString('pt-PT') }}",
+    sameDay: "Hoje às {{ date | timeString('pt-PT') }}",
+    nextDay: "Amanhã às {{ date | timeString('pt-PT') }}",
     next6Days:
-      "{{ date | weekday('pt-BR','long') }} às {{ date | timeString('pt-BR') }}",
-    numeric: "{{ date | numeric('pt-BR') }}",
+      "{{ date | weekday('pt-PT','long') }} às {{ date | timeString('pt-PT') }}",
+    numeric: "{{ date | numeric('pt-PT') }}",
   },
 };
 
