@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import translations from "@/i18n/clerk"; // Ficheiro com strings em pt-PT do Clerk
+import translations from "@/i18n/clerk"; // File with localizations strings of Clerk
 import { ModalProvider } from "@/providers/modal-provider";
 
 import "./globals.css";
