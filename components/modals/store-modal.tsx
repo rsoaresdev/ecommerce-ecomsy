@@ -56,10 +56,13 @@ export const StoreModal = () => {
 
       const response = await axios.post("/api/stores", values);
       // console.log(response.data);
-      toast.success("Loja criada com sucesso!")
+      // toast.success("Loja criada com sucesso!")
+
+      // I'm using 'window.location.assign' instead of 'redirect', because it ensures a full refresh
+      window.location.assign(`/${response.data.id}`);
     } catch (error) {
       // console.log(error);
-      toast.error("Algo correu mal ao criar a loja.")
+      toast.error("Algo correu mal ao criar a loja.");
     } finally {
       setLoading(false);
     }
