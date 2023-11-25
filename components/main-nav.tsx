@@ -14,6 +14,11 @@ export function MainNav({
 
   const routes = [
     {
+      href: `/${params.storeId}`,
+      label: "Relatório",
+      active: pathname === `/${params.storeId}`,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: "Definições",
       active: pathname === `/${params.storeId}/settings`,

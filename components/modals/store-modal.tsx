@@ -7,19 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-// Configure zod language
-import i18next from "i18next";
-import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
-
-i18next.init({
-  lng: "pt",
-  resources: {
-    pt: { zod: translation },
-  },
-});
-z.setErrorMap(zodI18nMap);
-
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Modal } from "@/components/ui/modal";
 import {
@@ -32,6 +19,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// Configure zod language
+import i18next from "i18next";
+import { zodI18nMap } from "zod-i18n-map";
+import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
+
+i18next.init({
+  lng: "pt",
+  resources: {
+    pt: { zod: translation },
+  },
+});
+z.setErrorMap(zodI18nMap);
 
 // Validate the shop name. Should be a string, and a minimum of 1 character.
 const formSchema = z.object({
