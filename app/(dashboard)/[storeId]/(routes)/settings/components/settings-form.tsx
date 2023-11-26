@@ -104,6 +104,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={loading}
+        buttonLabel="Apagar loja"
+        description={`A loja (${initialData.name}) será permanentemente eliminada. Esta operação não pode ser revertida.`}
       />
       <div className="flex items-center justify-between">
         <Heading title="Definições" description="Gerir preferências da loja" />

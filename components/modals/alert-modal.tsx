@@ -8,6 +8,8 @@ interface AlertModalProps {
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
+  description: string;
+  buttonLabel: string;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
@@ -15,6 +17,8 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   onClose,
   onConfirm,
   loading,
+  description,
+  buttonLabel,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -29,7 +33,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title="Tem a certeza?"
-      description={`A loja será permanentemente eliminada. Esta operação não pode ser revertida.`}
+      description={description}
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -38,7 +42,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
           Cancelar
         </Button>
         <Button disabled={loading} variant="destructive" onClick={onConfirm}>
-          Apagar loja
+          {buttonLabel}
         </Button>
       </div>
     </Modal>

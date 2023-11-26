@@ -10,13 +10,13 @@ export async function GET(
   try {
     // If the billboardId parameter is not passed, throw error 400
     if (!params.billboardId) {
-      return new NextResponse("Parâmetro 'billboardId' obrigatório!", {
+      return new NextResponse("billboardId is required!", {
         status: 400,
       });
     }
 
     // Get a billboard by their id
-    const billboard = await prismadb.store.findUnique({
+    const billboard = await prismadb.billboard.findUnique({
       where: {
         id: params.billboardId,
       },
@@ -42,26 +42,26 @@ export async function PATCH(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autenticado", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     // If the label parameter is not passed, throw error 400
     if (!label) {
-      return new NextResponse("Parâmetro 'label' obrigatório!", {
+      return new NextResponse("label' is required!", {
         status: 400,
       });
     }
 
     // If the imageUrl parameter is not passed, throw error 400
     if (!imageUrl) {
-      return new NextResponse("Parâmetro 'imageUrl' obrigatório!", {
+      return new NextResponse("imageUrl is required!", {
         status: 400,
       });
     }
 
     // If the billboardId parameter is not passed, throw error 400
     if (!params.billboardId) {
-      return new NextResponse("Parâmetro 'billboardId' obrigatório!", {
+      return new NextResponse("billboardId is required!", {
         status: 400,
       });
     }
@@ -76,7 +76,7 @@ export async function PATCH(
 
     if (!storeByUserId) {
       // If the user is trying to change a store that is not theirs, throw error 403
-      return new NextResponse("Não autorizado", {
+      return new NextResponse("Unauthorized", {
         status: 403,
       });
     }
@@ -109,12 +109,12 @@ export async function DELETE(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autenticado", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     // If the billboardId parameter is not passed, throw error 400
     if (!params.billboardId) {
-      return new NextResponse("Parâmetro 'billboardId' obrigatório!", {
+      return new NextResponse("billboardId is required!", {
         status: 400,
       });
     }
@@ -129,13 +129,13 @@ export async function DELETE(
 
     if (!storeByUserId) {
       // If the user is trying to change a store that is not theirs, throw error 403
-      return new NextResponse("Não autorizado", {
+      return new NextResponse("Unauthorized", {
         status: 403,
       });
     }
 
     // Delete the billboard(s)
-    const billboard = await prismadb.store.deleteMany({
+    const billboard = await prismadb.billboard.deleteMany({
       where: {
         id: params.billboardId,
       },

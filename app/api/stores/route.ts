@@ -12,12 +12,12 @@ export async function POST(req: Request) {
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autenticado", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     // If the name parameter is not passed, throw error 400
     if (!name) {
-      return new NextResponse("Parâmetro 'name' obrigatório!", { status: 400 });
+      return new NextResponse("name is required!", { status: 400 });
     }
 
     // Creates a entry in the 'Stores' table of the database

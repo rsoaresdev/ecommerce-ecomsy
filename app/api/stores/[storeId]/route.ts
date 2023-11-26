@@ -15,17 +15,17 @@ export async function PATCH(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autenticado", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     // If the name parameter is not passed, throw error 400
     if (!name) {
-      return new NextResponse("Parâmetro 'name' obrigatório!", { status: 400 });
+      return new NextResponse("name is required!", { status: 400 });
     }
 
     // If the storeId parameter is not passed, throw error 400
     if (!params.storeId) {
-      return new NextResponse("Parâmetro 'storeId' obrigatório!", {
+      return new NextResponse("storeId is required!", {
         status: 400,
       });
     }
@@ -58,12 +58,12 @@ export async function DELETE(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autenticado", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 401 });
     }
 
     // If the storeId parameter is not passed, throw error 400
     if (!params.storeId) {
-      return new NextResponse("Parâmetro 'storeId' obrigatório!", {
+      return new NextResponse("storeId is required!", {
         status: 400,
       });
     }

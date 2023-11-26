@@ -28,7 +28,6 @@ import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
@@ -42,7 +41,9 @@ z.setErrorMap(zodI18nMap);
 
 const formSchema = z.object({
   label: z.string().min(1),
-  imageUrl: z.string().min(1),
+  imageUrl: z.string().refine((data) => data.length > 0, {
+    message: "A imagem é obrigatória.",
+  }),
 });
 
 type BillboardFormValues = z.infer<typeof formSchema>;
@@ -56,11 +57,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  /* 
-    * Make sure to use the hook, to prevent that in the split second you get the url from the server there is no hydration error
-    ? https://nextjs.org/docs/messages/react-hydration-error
-  */
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -97,8 +93,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         // Create
         await axios.post(`/api/${params.storeId}/billboards`, data);
       }
-      router.refresh();
       router.push(`/${params.storeId}/billboards`);
+      router.refresh();
       toast.success(toastMessageSuccess);
     } catch (error) {
       toast.error(toastMessageError);
@@ -114,9 +110,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       await axios.delete(
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
-      router.refresh();
       toast.success("Painel apagado com sucesso.");
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
+      router.refresh();
     } catch (error) {
       toast.error(
         "Certifique-se que remove todas as categorias que usam este painel, antes de o apagar."
@@ -133,6 +129,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={loading}
+        buttonLabel="Apagar painel"
+        description="O painel será permanentemente eliminado. Esta operação não pode ser revertida."
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
@@ -195,7 +193,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </Button>
         </form>
       </Form>
-      <Separator />
     </>
   );
 };

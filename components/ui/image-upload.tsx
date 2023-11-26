@@ -27,6 +27,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   }, []);
 
   const onUpload = (result: any) => {
+    // console.log(result);
+    /**
+     * {
+     *  event": "success",
+     *  "info": {
+     *    ...
+     *    "secure_url": "https://res.cloudinary.com/di3pq7s16/image/upload/v1701030649/rzrxsxogtgolus4fuv55.jpg"
+     *    ...
+     *   }
+     * }
+     */
     onChange(result.info.secure_url);
   };
 
@@ -36,7 +47,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div>
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-1 flex items-center gap-4">
         {value.map((url) => (
           <div
             key={url}

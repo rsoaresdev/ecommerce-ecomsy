@@ -29,6 +29,7 @@ export function MainNav({
       active: pathname === `/${params.storeId}/settings`,
     },
   ];
+
   // Uses the 'cn' library to merge styles
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
@@ -37,10 +38,10 @@ export function MainNav({
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-primary",
+            "px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out",
             route.active
-              ? "text-black dark:text-white"
-              : "text-muted-foreground"
+              ? "bg-slate-500 text-white dark:bg-gray-700 dark:text-white"
+              : "text-zinc-600 hover:bg-slate-400 hover:text-white dark:hover:bg-gray-700 dark:hover:text-white"
           )}
         >
           {route.label}
