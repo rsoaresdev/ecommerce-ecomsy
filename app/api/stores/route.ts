@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autorizado", { status: 401 });
+      return new NextResponse("Não autenticado", { status: 401 });
     }
 
     // If the name parameter is not passed, throw error 400

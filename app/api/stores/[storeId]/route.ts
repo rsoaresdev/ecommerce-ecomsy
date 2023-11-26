@@ -1,6 +1,7 @@
-import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+
+import prismadb from "@/lib/prismadb";
 
 export async function PATCH(
   req: Request,
@@ -14,7 +15,7 @@ export async function PATCH(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autorizado", { status: 401 });
+      return new NextResponse("Não autenticado", { status: 401 });
     }
 
     // If the name parameter is not passed, throw error 400
@@ -57,7 +58,7 @@ export async function DELETE(
 
     // If the user is not logged in, throw error 401
     if (!userId) {
-      return new NextResponse("Não autorizado", { status: 401 });
+      return new NextResponse("Não autenticado", { status: 401 });
     }
 
     // If the storeId parameter is not passed, throw error 400

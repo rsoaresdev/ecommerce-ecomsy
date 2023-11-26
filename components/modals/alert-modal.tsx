@@ -8,7 +8,6 @@ interface AlertModalProps {
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
-  storeName: string;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
@@ -16,7 +15,6 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   onClose,
   onConfirm,
   loading,
-  storeName,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -31,7 +29,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title="Tem a certeza?"
-      description={`A loja (${storeName}) será permanentemente eliminada. Esta operação não pode ser revertida.`}
+      description={`A loja será permanentemente eliminada. Esta operação não pode ser revertida.`}
       isOpen={isOpen}
       onClose={onClose}
     >
