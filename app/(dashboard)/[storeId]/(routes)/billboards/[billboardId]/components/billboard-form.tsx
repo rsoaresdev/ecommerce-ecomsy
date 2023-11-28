@@ -9,10 +9,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 
+import { UploadDropzone } from "@/utils/uploadthing";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import { AlertModal } from "@/components/modals/alert-modal";
 import {
   Form,
   FormControl,
@@ -27,9 +30,6 @@ import { Input } from "@/components/ui/input";
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
-import { AlertModal } from "@/components/modals/alert-modal";
-import { useOrigin } from "@/hooks/use-origin";
-import ImageUpload from "@/components/ui/image-upload";
 
 i18next.init({
   lng: "pt",
@@ -58,11 +58,15 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openRemoveImage, setOpenRemoveImage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
   const title = initialData ? "Editar painel" : "Criar painel";
-  const description = initialData ? "Editar um painel" : "Criar um novo painel";
+  const description = initialData
+    ? "Editar um painel publicitário"
+    : "Criar um novo painel";
   const toastMessageSuccess = initialData
     ? "Painel atualizado com sucesso."
     : "Painel criado com sucesso!";
@@ -119,18 +123,52 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       );
     } finally {
       setLoading(false);
-      setOpen(false);
+      setOpenDelete(false);
     }
   };
+
+  // Event trigger when edit image
+  const onRemoveImage = async (imageUrl: string) => {
+    try {
+      setLoading(true);
+      await axios.delete("/api/uploadthing", {
+        data: {
+          url: imageUrl,
+        },
+      });
+
+      // I'm using 'window.location.assign' instead of 'router.refresh()', because it ensures a full refresh
+      // toast.success("Imagem apagada com sucesso.");
+      // router.refresh();
+      window.location.assign(
+        `/${params.storeId}/billboards/${params.billboardId}`
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error("Ocorreu um erro inesperado ao apagar a imagem.");
+    } finally {
+      setLoading(false);
+      setOpenRemoveImage(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
+        isOpen={openDelete}
+        onClose={() => setOpenDelete(false)}
         onConfirm={onDelete}
         loading={loading}
         buttonLabel="Apagar painel"
         description="O painel será permanentemente eliminado. Esta operação não pode ser revertida."
+      />
+      <AlertModal
+        isOpen={openRemoveImage}
+        onClose={() => setOpenRemoveImage(false)}
+        onConfirm={() => onRemoveImage(imageUrl)}
+        loading={loading}
+        buttonLabel="Apagar imagem"
+        description="A imagem será permanentemente eliminada. Esta operação não pode ser revertida."
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
@@ -139,7 +177,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             disabled={loading}
             variant="destructive"
             size="sm"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenDelete(true)}
           >
             <Trash className="h-4 w-4" />
           </Button>
@@ -151,24 +189,61 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Imagem</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value ? [field.value] : []}
-                    disabled={loading}
-                    onChange={(url) => field.onChange(url)}
-                    onRemove={() => field.onChange("")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Imagem</FormLabel>
+                  <FormControl>
+                    {imageUrl || field.value ? (
+                      <div>
+                        <Image
+                          src={imageUrl || field.value}
+                          alt="billboard image"
+                          width={1920}
+                          height={1080}
+                          className="object-cover border-2 rounded-md border-dashed bg-[f8fafc] border-[c3c5c9]"
+                          priority
+                        />
+                        <Button
+                          disabled={loading}
+                          variant="destructive"
+                          onClick={() => {
+                            setImageUrl(field.value);
+                            setOpenRemoveImage(true);
+                          }}
+                          type="button"
+                          className="ml-auto mt-2"
+                        >
+                          <Trash className="h-4 w-4 mr-2" />
+                          Remover imagem
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <UploadDropzone
+                          className="bg-zinc-100 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-400"
+                          endpoint="billboardImage"
+                          onClientUploadComplete={(res) => {
+                            console.log("Uploaded imagem: ", res[0].url);
+                            setImageUrl(res[0].url);
+                            field.onChange(res[0].url);
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast.error("Só é possível enviar uma imagem!");
+                            console.log(error);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}

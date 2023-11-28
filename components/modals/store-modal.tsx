@@ -58,7 +58,7 @@ export const StoreModal = () => {
       // console.log(response.data);
       // toast.success("Loja criada com sucesso!")
 
-      // I'm using 'window.location.assign' instead of 'redirect', because it ensures a full refresh
+      // I'm using 'window.location.assign' instead of 'router.refresh()', because it ensures a full refresh
       window.location.assign(`/${response.data.id}`);
     } catch (error) {
       // console.log(error);
