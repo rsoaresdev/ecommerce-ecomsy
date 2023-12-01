@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Billboard } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -42,7 +42,7 @@ z.setErrorMap(zodI18nMap);
 const formSchema = z.object({
   label: z.string().min(1),
   imageUrl: z.string().refine((data) => data.length > 0, {
-    message: "A imagem é obrigatória.",
+    message: "Imagem obrigatória.",
   }),
 });
 
@@ -62,6 +62,33 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const [openRemoveImage, setOpenRemoveImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+
+  // Delete the UploadThing billboard image when leave or leave the page.
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      // It only proceeds when there is an imageURL (i.e. when the image is first uploaded).
+      if (imageUrl) {
+        // Delete the billboard image from UploadThing here
+        try {
+          await axios.delete("/api/uploadthing", {
+            data: {
+              url: imageUrl || initialData?.imageUrl,
+            },
+          });
+        } catch (error) {
+          console.error("[BILLBOARD-FORM]:", error);
+        }
+      }
+    };
+
+    // Attach the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Detach the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [imageUrl, initialData]);
 
   const title = initialData ? "Editar painel" : "Criar painel";
   const description = initialData
@@ -85,18 +112,16 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 
   const onSubmit = async (data: BillboardFormValues) => {
     try {
-      // console.log(data);
       setLoading(true);
-      if (initialData) {
-        // Edit
-        await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
-          data
-        );
-      } else {
-        // Create
-        await axios.post(`/api/${params.storeId}/billboards`, data);
-      }
+
+      const endpoint = initialData
+        ? `/api/${params.storeId}/billboards/${params.billboardId}`
+        : `/api/${params.storeId}/billboards`;
+
+      const method = initialData ? axios.patch : axios.post;
+
+      await method(endpoint, data);
+
       router.push(`/${params.storeId}/billboards`);
       router.refresh();
       toast.success(toastMessageSuccess);
@@ -111,9 +136,19 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
+
+      // Delete the billboard
       await axios.delete(
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
+
+      // Delete the billboard image from UploadThing
+      await axios.delete("/api/uploadthing", {
+        data: {
+          url: initialData?.imageUrl,
+        },
+      });
+
       toast.success("Painel apagado com sucesso.");
       router.push(`/${params.storeId}/billboards`);
       router.refresh();
@@ -128,21 +163,30 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   };
 
   // Event trigger when edit image
-  const onRemoveImage = async (imageUrl: string) => {
+  const onRemoveImage = async () => {
     try {
       setLoading(true);
+
+      const imageUrlToDelete = imageUrl || initialData?.imageUrl;
+
+      if (!imageUrl) {
+        // Clear the imageUrl field
+        await axios.patch("/api/uploadthing", {
+          data: {
+            url: imageUrlToDelete,
+          },
+        });
+      }
+
+      // Delete the billboard image from UploadThing
       await axios.delete("/api/uploadthing", {
         data: {
-          url: imageUrl,
+          url: imageUrlToDelete,
         },
       });
 
-      // I'm using 'window.location.assign' instead of 'router.refresh()', because it ensures a full refresh
-      // toast.success("Imagem apagada com sucesso.");
-      // router.refresh();
-      window.location.assign(
-        `/${params.storeId}/billboards/${params.billboardId}`
-      );
+      // Reload the webview
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast.error("Ocorreu um erro inesperado ao apagar a imagem.");
@@ -157,7 +201,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       <AlertModal
         isOpen={openDelete}
         onClose={() => setOpenDelete(false)}
-        onConfirm={onDelete}
+        onConfirm={() => onDelete()}
         loading={loading}
         buttonLabel="Apagar painel"
         description="O painel será permanentemente eliminado. Esta operação não pode ser revertida."
@@ -165,7 +209,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       <AlertModal
         isOpen={openRemoveImage}
         onClose={() => setOpenRemoveImage(false)}
-        onConfirm={() => onRemoveImage(imageUrl)}
+        onConfirm={() => onRemoveImage()}
         loading={loading}
         buttonLabel="Apagar imagem"
         description="A imagem será permanentemente eliminada. Esta operação não pode ser revertida."
@@ -211,7 +255,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                           disabled={loading}
                           variant="destructive"
                           onClick={() => {
-                            setImageUrl(field.value);
                             setOpenRemoveImage(true);
                           }}
                           type="button"

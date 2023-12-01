@@ -7,6 +7,7 @@ import { Store } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 
@@ -44,9 +45,17 @@ interface SettingsFormProps {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  name: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(/^[a-zA-Z0-9 ]+$/, {
+      message: "Texto deve conter apenas letras e números.",
+    })
+    .refine((value) => value.trim() === value, {
+      message: "Texto não pode conter espaços em branco no início ou no final.",
+    }),
 });
-
 type SettingsFormValues = z.infer<typeof formSchema>;
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
@@ -85,9 +94,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(`/api/stores/${params.storeId}`);
-      router.refresh();
-      toast.success("Loja apagada com sucesso.");
-      router.push("/");
+      // Reload the webview
+      window.location.reload();
+      toast("Loja apagada com sucesso!", { icon: "🗑️" });
     } catch (error) {
       toast.error(
         "Certifique-se que remove todos os produtos e categorias, antes de apagar a loja."

@@ -40,7 +40,27 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
+
+      //! It's important to delete the image first rather than the billboard, so that axios can get the billboard data!
+
+      // Delete the billboard image from UploadThing
+      const billboardUrlResponse = await axios.get(
+        `/api/${params.storeId}/billboards/${data.id}`
+      );
+
+      const billboardUrl = billboardUrlResponse.data.imageUrl;
+
+      if (billboardUrl) {
+        await axios.delete("/api/uploadthing", {
+          data: {
+            url: billboardUrl,
+          },
+        });
+      }
+
+      // Delete the billboard
       await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+
       router.refresh();
       toast.success("Painel apagado com sucesso.");
       // router.push("/");
@@ -86,7 +106,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => setOpen(true)}
+            className="text-red-600"
+          >
             <Trash className="mr-2 h-4 w-4" />
             Apagar
           </DropdownMenuItem>
