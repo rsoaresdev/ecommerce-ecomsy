@@ -39,8 +39,8 @@ const formSchema = z.object({
     .string()
     .min(3)
     .max(30)
-    .regex(/^[a-zA-Z0-9 ]+$/, {
-      message: "Texto deve conter apenas letras e números.",
+    .regex(/^[a-zA-Z0-9 -]+$/, {
+      message: "Texto deve conter apenas letras, números e hifens.",
     })
     .refine((value) => value.trim() === value, {
       message: "Texto não pode conter espaços em branco no início ou no final.",

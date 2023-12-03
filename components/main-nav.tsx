@@ -31,6 +31,11 @@ export function MainNav({
       active: pathname === `/${params.storeId}/billboards`,
     },
     {
+      href: `/${params.storeId}/categories`,
+      label: "Categorias",
+      active: pathname === `/${params.storeId}/categories`,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: "Definições",
       active: pathname === `/${params.storeId}/settings`,
@@ -48,7 +53,10 @@ export function MainNav({
       {routes.map((route) => (
         <NavigationMenuItem key={route.href}>
           <Link href={route.href} legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink
+              className={navigationMenuTriggerStyle()}
+              active={route.active}
+            >
               {route.label}
             </NavigationMenuLink>
           </Link>

@@ -40,7 +40,16 @@ i18next.init({
 z.setErrorMap(zodI18nMap);
 
 const formSchema = z.object({
-  label: z.string().min(1),
+  label: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(/^[a-zA-Z0-9áéíóúâêîôûãõñç ]+$/, {
+      message: "Texto deve conter apenas letras e números.",
+    })
+    .refine((value) => value.trim() === value, {
+      message: "Texto não pode conter espaços em branco no início ou no final.",
+    }),
   imageUrl: z.string().refine((data) => data.length > 0, {
     message: "Imagem obrigatória.",
   }),
@@ -98,8 +107,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     ? "Painel atualizado com sucesso."
     : "Painel criado com sucesso!";
   const toastMessageError = initialData
-    ? "Alco correu mal ao atualizar o painel!"
-    : "Alco correu mal ao criar o painel!";
+    ? "Algo correu mal ao atualizar o painel!"
+    : "Algo correu mal ao criar o painel!";
   const action = initialData ? "Guardar alterações" : "Criar";
 
   const form = useForm<BillboardFormValues>({
@@ -132,7 +141,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     }
   };
 
-  // It won't be possible to delete the store with products and categories in it.
+  // It won't be possible to delete the billboards with categories in it.
   const onDelete = async () => {
     try {
       setLoading(true);
