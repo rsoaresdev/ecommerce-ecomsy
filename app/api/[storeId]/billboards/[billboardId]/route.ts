@@ -119,6 +119,21 @@ export async function DELETE(
       });
     }
 
+    // Check for categories linked to billboard
+    const categoriesLinked = await prismadb.category.findFirst({
+      where: {
+        billboardId: params.billboardId,
+      },
+    });
+
+    if (categoriesLinked) {
+      // If any categories are linked, it returns an error indicating that deletion is not possible
+      return new NextResponse(
+        "It's not possible to delete the billboard as there are categories linked to it",
+        { status: 400 }
+      );
+    }
+
     // Checks if the logged-in user owns the 'storeId' store. To prevent billboards being deleted in stores that are not owned.
     const storeByUserId = await prismadb.store.findFirst({
       where: {

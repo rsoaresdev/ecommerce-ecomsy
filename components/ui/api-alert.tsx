@@ -1,10 +1,10 @@
 "use client";
 
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Copy, Server } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge, BadgeProps } from "@/components/ui/badge";
+import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 interface ApiAlertProps {
@@ -30,9 +30,7 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
 }) => {
   const onCopy = () => {
     navigator.clipboard.writeText(description);
-    toast("Copiado!", {
-      icon: "📋",
-    });
+    toast.success("Copiado!");
   };
 
   return (

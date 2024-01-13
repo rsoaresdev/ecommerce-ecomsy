@@ -3,10 +3,10 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { Billboard, Category } from "@prisma/client";
+import { type Billboard, type Category } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 
@@ -49,14 +49,14 @@ const formSchema = z.object({
     .string()
     .min(3)
     .max(30)
-    .regex(/^[a-zA-Z0-9 -]+$/, {
-      message: "Texto deve conter apenas letras, números e hifens.",
+    .regex(/^[a-zA-Z0-9áéíóúâêîôûãõñç ]+$/, {
+      message: "Texto deve conter apenas letras e números",
     })
     .refine((value) => value.trim() === value, {
-      message: "Texto não pode conter espaços em branco no início ou no final.",
+      message: "Texto não pode conter espaços em branco no início ou no final",
     }),
   billboardId: z.string().refine((data) => data.length > 0, {
-    message: "Selecione um painel publicitário.",
+    message: "Selecione um painel publicitário",
   }),
 });
 
@@ -64,7 +64,7 @@ type CategoryFormValues = z.infer<typeof formSchema>;
 
 interface CategoryFormProps {
   initialData: Category | null;
-  billboards: Billboard[];
+  billboards: Array<Billboard>;
 }
 
 export const CategoryForm: React.FC<CategoryFormProps> = ({
@@ -146,8 +146,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     <>
       <AlertModal
         isOpen={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onConfirm={() => onDelete()}
+        onClose={() => {
+          setOpenDelete(false);
+        }}
+        onConfirm={async () => {
+          await onDelete();
+        }}
         loading={loading}
         buttonLabel="Apagar categoria"
         description="A categoria será permanentemente eliminada. Esta operação não pode ser revertida."
@@ -159,7 +163,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             disabled={loading}
             variant="destructive"
             size="sm"
-            onClick={() => setOpenDelete(true)}
+            onClick={() => {
+              setOpenDelete(true);
+            }}
           >
             <Trash className="h-4 w-4" />
           </Button>

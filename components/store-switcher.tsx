@@ -7,7 +7,7 @@ import {
   PlusCircle,
   Store as StoreIcon,
 } from "lucide-react";
-import { Store } from "@prisma/client";
+import { type Store } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 >;
 
 interface StoreSwitcherProps extends PopoverTriggerProps {
-  items: Store[];
+  items: Array<Store>;
 }
 
 export default function StoreSwitcher({
@@ -76,10 +76,10 @@ export default function StoreSwitcher({
         >
           <StoreIcon className="mr-2 h-4 w-4" />
           {currentStore?.label}
-          <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="max-w-[320px] min-w-[150px] p-0">
+      <PopoverContent className="max-w-[320px] min-w-[150px] ml-4 p-0">
         <Command>
           <CommandList>
             <CommandInput placeholder="Procura uma loja" />
@@ -88,7 +88,9 @@ export default function StoreSwitcher({
               {formattedItems.map((store) => (
                 <CommandItem
                   key={store.value}
-                  onSelect={() => onStoreSelect(store)}
+                  onSelect={() => {
+                    onStoreSelect(store);
+                  }}
                   className="text-sm"
                 >
                   <StoreIcon className="mr-2 h-4 w-4" />

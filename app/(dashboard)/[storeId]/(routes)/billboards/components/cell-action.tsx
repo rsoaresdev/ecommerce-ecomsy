@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-import { toast } from "react-hot-toast";
 import { useRouter, useParams } from "next/navigation";
 
 import {
@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { BillboardColumn } from "./columns";
+import { type BillboardColumn } from "./columns";
 
 interface CellActionProps {
   data: BillboardColumn;
@@ -31,9 +31,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast("Copiado!", {
-      icon: "📋",
-    });
+    toast.success("ID copiado!");
   };
 
   // It won't be possible to delete the store with products and categories in it.
@@ -41,7 +39,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     try {
       setLoading(true);
 
-      //! It's important to delete the image first rather than the billboard, so that axios can get the billboard data!
+      // ! It's important to delete the image first rather than the billboard, so that axios can get the billboard data!
 
       // Delete the billboard image from UploadThing
       const billboardUrlResponse = await axios.get(
@@ -51,15 +49,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       const billboardUrl = billboardUrlResponse.data.imageUrl;
 
       if (billboardUrl) {
+        // Delete the billboard
+        await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+
         await axios.delete("/api/uploadthing", {
           data: {
             url: billboardUrl,
           },
         });
       }
-
-      // Delete the billboard
-      await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
 
       router.refresh();
       toast.success("Painel apagado com sucesso.");
@@ -78,7 +76,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     <>
       <AlertModal
         isOpen={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         onConfirm={onDelete}
         loading={loading}
         buttonLabel="Apagar painel"
@@ -94,20 +94,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Ações</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.id)}>
+          <DropdownMenuItem
+            onClick={() => {
+              onCopy(data.id);
+            }}
+          >
             <Copy className="mr-2 h-4 w-4" />
             Copiar ID
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
-            }
+            onClick={() => {
+              router.push(`/${params.storeId}/billboards/${data.id}`);
+            }}
           >
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+            }}
             className="text-red-600"
           >
             <Trash className="mr-2 h-4 w-4" />

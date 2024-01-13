@@ -3,10 +3,10 @@
 import * as z from "zod";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Billboard } from "@prisma/client";
+import { type Billboard } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -45,13 +45,13 @@ const formSchema = z.object({
     .min(3)
     .max(30)
     .regex(/^[a-zA-Z0-9áéíóúâêîôûãõñç ]+$/, {
-      message: "Texto deve conter apenas letras e números.",
+      message: "Texto deve conter apenas letras e números",
     })
     .refine((value) => value.trim() === value, {
-      message: "Texto não pode conter espaços em branco no início ou no final.",
+      message: "Texto não pode conter espaços em branco no início ou no final",
     }),
   imageUrl: z.string().refine((data) => data.length > 0, {
-    message: "Imagem obrigatória.",
+    message: "Imagem obrigatória",
   }),
 });
 
@@ -209,16 +209,24 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     <>
       <AlertModal
         isOpen={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onConfirm={() => onDelete()}
+        onClose={() => {
+          setOpenDelete(false);
+        }}
+        onConfirm={async () => {
+          await onDelete();
+        }}
         loading={loading}
         buttonLabel="Apagar painel"
         description="O painel será permanentemente eliminado. Esta operação não pode ser revertida."
       />
       <AlertModal
         isOpen={openRemoveImage}
-        onClose={() => setOpenRemoveImage(false)}
-        onConfirm={() => onRemoveImage()}
+        onClose={() => {
+          setOpenRemoveImage(false);
+        }}
+        onConfirm={async () => {
+          await onRemoveImage();
+        }}
         loading={loading}
         buttonLabel="Apagar imagem"
         description="A imagem será permanentemente eliminada. Esta operação não pode ser revertida."
@@ -230,7 +238,9 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             disabled={loading}
             variant="destructive"
             size="sm"
-            onClick={() => setOpenDelete(true)}
+            onClick={() => {
+              setOpenDelete(true);
+            }}
           >
             <Trash className="h-4 w-4" />
           </Button>
@@ -279,7 +289,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                           className="bg-zinc-100 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-400"
                           endpoint="billboardImage"
                           onClientUploadComplete={(res) => {
-                            console.log("Uploaded imagem: ", res[0].url);
+                            console.log("Image uploaded: ", res[0].url);
                             setImageUrl(res[0].url);
                             field.onChange(res[0].url);
                           }}

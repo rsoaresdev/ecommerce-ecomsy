@@ -5,7 +5,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Modal } from "@/components/ui/modal";
@@ -39,11 +39,11 @@ const formSchema = z.object({
     .string()
     .min(3)
     .max(30)
-    .regex(/^[a-zA-Z0-9 -]+$/, {
-      message: "Texto deve conter apenas letras, números e hifens.",
+    .regex(/^[a-zA-Z0-9áéíóúâêîôûãõñç ]+$/, {
+      message: "Texto deve conter apenas letras e números",
     })
     .refine((value) => value.trim() === value, {
-      message: "Texto não pode conter espaços em branco no início ou no final.",
+      message: "Texto não pode conter espaços em branco no início ou no final",
     }),
 });
 
@@ -92,7 +92,9 @@ export const StoreModal = () => {
       title="Abrir uma nova loja"
       description="Crie a sua loja virtual em minutos e alcance novos clientes."
       isOpen={storeModal.isOpen}
-      onClose={() => handleCloseModal()}
+      onClose={() => {
+        handleCloseModal();
+      }}
     >
       <div>
         <div className="space-y-4 py-2 pb-4">
@@ -121,7 +123,9 @@ export const StoreModal = () => {
                   type="reset"
                   disabled={loading}
                   variant={"outline"}
-                  onClick={() => handleCloseModal()}
+                  onClick={() => {
+                    handleCloseModal();
+                  }}
                 >
                   Cancelar
                 </Button>

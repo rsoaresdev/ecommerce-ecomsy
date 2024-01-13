@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { useRouter, useParams } from "next/navigation";
 
 import {
@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { CategoryColumn } from "./columns";
+import { type CategoryColumn } from "./columns";
 
 interface CellActionProps {
   data: CategoryColumn;
@@ -31,9 +31,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast("Copiado!", {
-      icon: "📋",
-    });
+    toast.success("Copiado!");
   };
 
   // It won't be possible to delete the category with products in it.
@@ -60,7 +58,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     <>
       <AlertModal
         isOpen={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         onConfirm={onDelete}
         loading={loading}
         buttonLabel="Apagar categoria"
@@ -76,20 +76,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Ações</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.id)}>
+          <DropdownMenuItem
+            onClick={() => {
+              onCopy(data.id);
+            }}
+          >
             <Copy className="mr-2 h-4 w-4" />
             Copiar ID
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`/${params.storeId}/categories/${data.id}`)
-            }
+            onClick={() => {
+              router.push(`/${params.storeId}/categories/${data.id}`);
+            }}
           >
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+            }}
             className="text-red-600"
           >
             <Trash className="mr-2 h-4 w-4" />

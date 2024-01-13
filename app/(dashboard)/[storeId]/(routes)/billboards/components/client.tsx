@@ -9,10 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
 import { ApiList } from "@/components/ui/api-list";
 
-import { BillboardColumn, columns } from "./columns";
+import { type BillboardColumn, columns } from "./columns";
 
 interface BillboardClientProps {
-  data: BillboardColumn[];
+  data: Array<BillboardColumn>;
 }
 
 export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
@@ -27,7 +27,9 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
           description="Configure os paineis publicitários da sua loja"
         />
         <Button
-          onClick={() => router.push(`/${params.storeId}/billboards/new`)}
+          onClick={() => {
+            router.push(`/${params.storeId}/billboards/new`);
+          }}
         >
           <Plus className="mr-2 h-4 w-4" />
           Adicionar novo

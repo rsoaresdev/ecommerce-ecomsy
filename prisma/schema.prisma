@@ -33,7 +33,7 @@ model Billboard {
 
   // Adiciona um índice manualmente para melhorar o desempenho de consultas relacionadas.
   // No modo de relação "prisma", onde as chaves estrangeiras não são automaticamente criadas, este índice otimiza consultas que envolvem esta chave estrangeira.
-  //? https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
+  // ? https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode#indexes
   @@index([storeId])
 }
 

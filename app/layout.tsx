@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import translations from "@/i18n/clerk"; // File with localizations strings of Clerk
+import translations from "@/public/clerk"; // File with localizations strings of Clerk
 import { ModalProvider } from "@/providers/modal-provider";
-import { ToasterProvider } from "@/providers/toast-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
@@ -25,9 +26,11 @@ export default function RootLayout({
     <ClerkProvider localization={translations}>
       <html lang="pt">
         <body className={inter.className}>
-          <ToasterProvider />
-          <ModalProvider />
-          {children}
+          <main className="flex-1 h-full">
+            <ModalProvider />
+            <Toaster position="bottom-left" expand={false} richColors />
+            {children}
+          </main>
         </body>
       </html>
     </ClerkProvider>

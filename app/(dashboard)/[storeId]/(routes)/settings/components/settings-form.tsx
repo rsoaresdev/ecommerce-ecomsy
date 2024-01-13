@@ -3,10 +3,10 @@
 import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { Store } from "@prisma/client";
+import { type Store } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
@@ -49,11 +49,11 @@ const formSchema = z.object({
     .string()
     .min(3)
     .max(30)
-    .regex(/^[a-zA-Z0-9 -]+$/, {
-      message: "Texto deve conter apenas letras, números e hifens.",
+    .regex(/^[a-zA-Z0-9áéíóúâêîôûãõñç ]+$/, {
+      message: "Texto deve conter apenas letras e números",
     })
     .refine((value) => value.trim() === value, {
-      message: "Texto não pode conter espaços em branco no início ou no final.",
+      message: "Texto não pode conter espaços em branco no início ou no final",
     }),
 });
 type SettingsFormValues = z.infer<typeof formSchema>;
@@ -61,7 +61,7 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  /* 
+  /*
     * Make sure to use the hook, to prevent that in the split second you get the url from the server there is no hydration error
     ? https://nextjs.org/docs/messages/react-hydration-error
   */
@@ -96,7 +96,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       await axios.delete(`/api/stores/${params.storeId}`);
       // Reload the webview
       window.location.reload();
-      toast("Loja apagada com sucesso!", { icon: "🗑️" });
+      toast.success("Loja apagada com sucesso!");
     } catch (error) {
       toast.error(
         "Certifique-se que remove todos os produtos e categorias, antes de apagar a loja."
@@ -110,7 +110,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     <>
       <AlertModal
         isOpen={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         onConfirm={onDelete}
         loading={loading}
         buttonLabel="Apagar loja"
@@ -122,7 +124,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           disabled={loading}
           variant="destructive"
           size="sm"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
           <Trash className="h-4 w-4" />
         </Button>

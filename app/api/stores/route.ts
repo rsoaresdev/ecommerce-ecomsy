@@ -27,9 +27,9 @@ export async function POST(req: Request) {
       },
     });
 
-    //? 403 - Forbidden
+    // ? 403 - Forbidden
     if (userStoresLength >= 10) {
-      return new NextResponse("Maximum number of stores reached (10).", {
+      return new NextResponse("Maximum number of stores reached (10)", {
         status: 403,
       });
     }
@@ -41,8 +41,8 @@ export async function POST(req: Request) {
       },
     });
 
-    //? 409 - Conflict
-    //? Request cannot be completed due to a conflict with the current state of the resource.
+    // ? 409 - Conflict
+    // ? Request cannot be completed due to a conflict with the current state of the resource.
     if (existingStore) {
       return new NextResponse(
         "It's not possible to create a store with the same name as one you already have!",
