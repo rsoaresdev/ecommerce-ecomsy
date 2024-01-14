@@ -47,7 +47,7 @@ export async function PATCH(
 
     // If the label parameter is not passed, throw error 400
     if (!label) {
-      return new NextResponse("label' is required!", {
+      return new NextResponse("label is required!", {
         status: 400,
       });
     }
