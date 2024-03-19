@@ -287,14 +287,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                       <div>
                         <UploadDropzone
                           className="bg-zinc-100 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-400"
-                          endpoint="billboardImage"
+                          endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             console.log("Image uploaded: ", res[0].url);
                             setImageUrl(res[0].url);
                             field.onChange(res[0].url);
                           }}
                           onUploadError={(error: Error) => {
-                            toast.error("Só é possível enviar uma imagem!");
+                            toast.error("You can only send one image!");
                             console.log(error);
                           }}
                         />

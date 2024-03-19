@@ -76,9 +76,11 @@ export const StoreModal = () => {
       } else {
         toast.error("Algo correu mal ao criar a loja.");
       }
-    } finally {
-      setLoading(false);
     }
+    //? Commented code, because by removing the loading state it is possible to press the "create store" button during redirection
+    // finally {
+    //   setLoading(false);
+    // }
   };
 
   function handleCloseModal() {

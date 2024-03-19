@@ -1,13 +1,13 @@
-import { createNextRouteHandler } from "uploadthing/next";
+import { createRouteHandler } from "uploadthing/next";
 import { UTApi } from "uploadthing/server";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
-import { uploadThingFileRouter } from "./core";
+import { fileRouter } from "./core";
 
 // Export routes for Next App Router
-export const { GET, POST } = createNextRouteHandler({
-  router: uploadThingFileRouter,
+export const { GET, POST } = createRouteHandler({
+  router: fileRouter,
 });
 
 // Delete image billboard
