@@ -1,6 +1,3 @@
-import { format } from "date-fns";
-import { pt } from "date-fns/locale"; // ? https://blog.cubos.academy/date-fns-a-ferramenta-essencial/
-
 import prismadb from "@/lib/prismadb";
 import { SizesClient } from "./components/client";
 import { type SizeColumn } from "./components/columns";
@@ -19,9 +16,7 @@ const SizesPage = async ({ params }: { params: { storeId: string } }) => {
     id: item.id,
     name: item.name,
     value: item.value,
-    createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy 'às' HH:mm", {
-      locale: pt,
-    }),
+    createdAt: item.createdAt,
   }));
 
   return (
