@@ -20,6 +20,11 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
 
   const components: { title: string; href: string; description: string }[] = [
     {
+      title: "Produtos",
+      href: `products`,
+      description: "Administre a sua variedade de produtos com facilidade.",
+    },
+    {
       title: "Paineis Publicitários",
       href: `billboards`,
       description:

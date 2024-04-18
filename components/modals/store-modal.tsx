@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 // Configure zod language
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
+import translation from "zod-i18n-map/locales/pt/zod.json"; // Import portuguese language translation files
 
 i18next.init({
   lng: "pt",

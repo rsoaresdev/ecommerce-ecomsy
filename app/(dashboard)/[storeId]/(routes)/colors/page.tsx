@@ -20,7 +20,7 @@ const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
       id: item.id,
       name: item.name,
       value: item.value,
-      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy '-' HH:mm", {
+      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy 'às' HH:mm", {
         locale: pt,
       }),
     })

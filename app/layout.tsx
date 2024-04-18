@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { fileRouter } from "@/app/api/uploadthing/core";
+import { utFileRouter } from "@/app/api/uploadthing/core";
 
 import "./globals.css";
 import "@uploadthing/react/styles.css";
@@ -38,7 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ClerkProvider>
-            <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
+            <NextSSRPlugin routerConfig={extractRouterConfig(utFileRouter)} />
             <main className="flex-1 h-full">
               <ModalProvider />
               <Toaster position="bottom-left" expand={false} richColors />

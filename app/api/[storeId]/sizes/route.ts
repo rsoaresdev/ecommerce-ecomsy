@@ -39,7 +39,7 @@ export async function POST(
       });
     }
 
-    // Checks if the logged-in user owns the 'storeId' store. To prevent colors being created in stores that are not owned.
+    // Checks if the logged-in user owns the 'storeId' store. To prevent sizes being created in stores that are not owned.
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
@@ -54,8 +54,8 @@ export async function POST(
       });
     }
 
-    // Create a color
-    const color = await prismadb.color.create({
+    // Create a size
+    const size = await prismadb.size.create({
       data: {
         name,
         value,
@@ -63,16 +63,16 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(color);
+    return NextResponse.json(size);
   } catch (error) {
     // TODO: Stop using console.log and switch to a logging service
-    console.log("[COLORS_POST]: ", error);
+    console.log("[SIZES_POST]: ", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function GET(
-  req: Request,
+  _req: Request,
   { params }: { params: { storeId: string } }
 ) {
   try {
@@ -83,17 +83,17 @@ export async function GET(
       });
     }
 
-    // Get all colors
-    const colors = await prismadb.color.findMany({
+    // Get all sizes
+    const sizes = await prismadb.size.findMany({
       where: {
         storeId: params.storeId,
       },
     });
 
-    return NextResponse.json(colors);
+    return NextResponse.json(sizes);
   } catch (error) {
     // TODO: Stop using console.log and switch to a logging service
-    console.log("[COLORS_GET]: ", error);
+    console.log("[SIZES_GET]: ", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

@@ -19,7 +19,7 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
     (item: BillboardColumn) => ({
       id: item.id,
       label: item.label,
-      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy '-' HH:mm", {
+      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy 'às' HH:mm", {
         locale: pt,
       }),
     })

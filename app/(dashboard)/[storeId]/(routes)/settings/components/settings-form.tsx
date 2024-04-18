@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 // Configure zod language
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
+import translation from "zod-i18n-map/locales/pt/zod.json"; // Import portuguese language translation files
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";

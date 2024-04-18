@@ -1,53 +1,40 @@
 import { createRouteHandler } from "uploadthing/next";
-import { UTApi } from "uploadthing/server";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
+import { utapi } from "@/server/uploadthing";
 
-import { fileRouter } from "./core";
+import { utFileRouter } from "./core";
 
 // Export routes for Next App Router
 export const { GET, POST } = createRouteHandler({
-  router: fileRouter,
+  router: utFileRouter,
 });
 
-// Delete image billboard
-export async function DELETE(request: Request) {
-  const data = await request.json();
-  const newUrl = data.url.substring(data.url.lastIndexOf("/") + 1);
-  const utapi = new UTApi();
+// Delete image from UploadThing
+export async function DELETE(req: Request) {
+  const body = await req.json();
+  const urlPart = body.url.split("/"); // Splits the URL into parts using the slash as a delimiter
+  const finalUrlPart = urlPart[urlPart.length - 1]; // Get the last part of the array
 
   try {
-    // Search for the billboard image on the database
-    const billboard = await prismadb.billboard.findMany({
-      where: {
-        imageUrl: data.url,
-      },
+    await utapi.deleteFiles(finalUrlPart);
+    return Response.json({
+      message: "Image deletion attempt successfully sent",
     });
-
-    /*
-      Deletes the image from the S3, only if it is registered in the database.
-      To handle the flow: Create billboard -> delete image -> delete billboard
-    */
-    if (billboard) {
-      // Delete image from UploadThing
-      await utapi.deleteFiles(newUrl);
-    }
   } catch (error) {
     console.log("[UPLOADTHING_DELETE]: ", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-
-  return Response.json({ message: "ok" });
 }
 
 // Remove billboard field
-export async function PATCH(request: Request) {
-  const data = await request.json();
+export async function PATCH(req: Request) {
+  const body = await req.json();
 
   try {
     await prismadb.billboard.updateMany({
       where: {
-        imageUrl: data.url,
+        imageUrl: body.url,
       },
       data: {
         imageUrl: "",
@@ -58,5 +45,5 @@ export async function PATCH(request: Request) {
     return new NextResponse("Internal error", { status: 500 });
   }
 
-  return Response.json({ message: "ok" });
+  return Response.json({ message: "imageUrl field flushed successfully" });
 }

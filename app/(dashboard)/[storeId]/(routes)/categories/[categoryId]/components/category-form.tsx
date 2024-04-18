@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { type Billboard, type Category } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { Trash, Undo2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 // Configure zod language
 import i18next from "i18next";
 import { zodI18nMap } from "zod-i18n-map";
-import translation from "zod-i18n-map/locales/PT/zod.json"; // Import portuguese language translation files
+import translation from "zod-i18n-map/locales/pt/zod.json"; // Import portuguese language translation files
 import {
   Select,
   SelectContent,
@@ -158,6 +158,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
+        <Button
+          onClick={() => {
+            router.push(`/${params.storeId}/categories`);
+          }}
+        >
+          <Undo2 className="mr-2 h-4 w-4" />
+          Voltar
+        </Button>
         {initialData && (
           <Button
             disabled={loading}

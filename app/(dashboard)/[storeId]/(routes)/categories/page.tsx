@@ -23,7 +23,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
       id: item.id,
       name: item.name,
       billboardLabel: item.billboard.label,
-      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy '-' HH:mm", {
+      createdAt: format(item.createdAt, "dd 'de' LLLL 'de' yyyy 'às' HH:mm", {
         locale: pt,
       }),
     })
