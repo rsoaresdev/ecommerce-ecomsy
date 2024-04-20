@@ -14,7 +14,7 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Trash, Undo2 } from "lucide-react";
+import { Package, PackageSearch, Trash, Undo2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,6 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import axios from "axios";
@@ -82,7 +83,7 @@ const formSchema = z.object({
     )
     .nonempty(), // Ensure that the image array is not empty
 
-  price: z.coerce.number().min(1),
+  price: z.coerce.number().min(1).max(9999999), // Max 9.9M
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
   sizeId: z.string().min(1),
@@ -215,26 +216,40 @@ export const ProductForm: React.FC<ProductFromProps> = ({
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        <Button
-          onClick={() => {
-            router.push(`/${params.storeId}/products`);
-          }}
-        >
-          <Undo2 className="mr-2 h-4 w-4" />
-          Voltar
-        </Button>
-        {initialData && (
+        <div className="flex items-center">
           <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-            disabled={loading}
+            className="mx-2"
+            onClick={() => {
+              router.push(`/${params.storeId}/products`);
+            }}
           >
-            <Trash className="w-4 h-4" />
+            <Undo2 className="mr-2 h-4 w-4" />
+            Voltar
           </Button>
-        )}
+          {initialData && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setOpen(true)}
+              disabled={loading}
+            >
+              <Trash className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
       </div>
       <Separator />
+      <Alert>
+        <PackageSearch className="h-4 w-4" />
+        <AlertTitle>Guia de criação de Produtos</AlertTitle>
+        <AlertDescription>
+          Dê vida aos seus produtos! Aqui, você pode personalizar cada detalhe.
+          Crie algo que reflita a sua visão única
+          <br />
+          Pode carregar até 10 imagens, para poder mostrar ao mundo todos os
+          ângulos do seu produto!
+        </AlertDescription>
+      </Alert>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -251,7 +266,7 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                     {!field.value || field.value.length === 0 ? (
                       <div>
                         <UploadDropzone
-                          className="bg-zinc-100 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-400"
+                          className="dark:bg-slate-800 ut-label:text-lg ut-allowed-content:ut-uploading:text-red-300"
                           endpoint="productsImagesUploader"
                           onClientUploadComplete={(files) => {
                             const newImages = [...field.value]; // Create a copy of the existing image array
@@ -326,6 +341,7 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Nome do produto"
                       {...field}
@@ -343,6 +359,7 @@ export const ProductForm: React.FC<ProductFromProps> = ({
                   <FormLabel>Preço</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       type="number"
                       disabled={loading}
                       placeholder="Preço do produto"

@@ -110,6 +110,7 @@ export const StoreModal = () => {
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
                       <Input
+                        autoComplete="off"
                         disabled={loading}
                         placeholder="Insira o nome da sua loja"
                         {...field}

@@ -30,13 +30,19 @@ export function ModeToggle() {
         <DropdownMenuLabel>Tema</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="h-4 w-4 mr-1" /> Claro
+          <Sun className="h-4 w-4" />{" "}
+          <div className="border-[0.5px] rounded-md border-gray-400 dark:border-gray-700 mx-2 h-3"></div>{" "}
+          Claro
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Moon className="h-4 w-4 mr-1" /> Escuro
+          <Moon className="h-4 w-4" />
+          <div className="border-[0.5px] rounded-md border-gray-400 dark:border-gray-700 mx-2 h-3"></div>{" "}
+          Escuro
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <SunMoon className="h-4 w-4 mr-1" /> Sistema
+          <SunMoon className="h-4 w-4" />{" "}
+          <div className="border-[0.5px] rounded-md border-gray-400 dark:border-gray-700 mx-2 h-3"></div>{" "}
+          Sistema
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

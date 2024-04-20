@@ -30,7 +30,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "http.cat",
+        hostname: "ecomsy.site",
         pathname: "/**",
       },
     ],

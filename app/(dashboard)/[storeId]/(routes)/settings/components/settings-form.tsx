@@ -146,6 +146,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Nome da loja"
                       {...field}

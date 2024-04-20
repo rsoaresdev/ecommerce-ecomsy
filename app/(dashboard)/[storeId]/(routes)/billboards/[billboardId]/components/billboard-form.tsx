@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { useEffect, useState } from "react";
 import { type Billboard } from "@prisma/client";
-import { Trash, Undo2 } from "lucide-react";
+import { Presentation, Trash, TriangleAlert, Undo2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -234,28 +235,54 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        <Button
-          onClick={() => {
-            router.push(`/${params.storeId}/billboards`);
-          }}
-        >
-          <Undo2 className="mr-2 h-4 w-4" />
-          Voltar
-        </Button>
-        {initialData && (
+        <div className="flex items-center">
           <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
+            className="mx-2"
             onClick={() => {
-              setOpenDelete(true);
+              router.push(`/${params.storeId}/billboards`);
             }}
           >
-            <Trash className="h-4 w-4" />
+            <Undo2 className="mr-2 h-4 w-4" />
+            Voltar
           </Button>
-        )}
+          {initialData && (
+            <Button
+              disabled={loading}
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
       <Separator />
+      <Alert>
+        <Presentation className="h-4 w-4" />
+        <AlertTitle>Guia de criação de Painéis Publicitários</AlertTitle>
+        <AlertDescription>
+          Faça upload da imagem desejada e insira o nome do painel para destacar
+          os seus produtos.
+          <br />
+          Isso não apenas ajuda a organizar e realçar os seus produtos de
+          maneira eficaz, mas também a criar uma experiência envolvente para os
+          seus clientes.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="destructive">
+        <TriangleAlert className="h-4 w-4" />
+        <AlertTitle>Responsabilidade do conteúdo</AlertTitle>
+        <AlertDescription>
+          Esteja ciente de que o Ecomsy não se responsabiliza pelas imagens
+          carregadas pelos utilizadores.
+          <br />
+          Garanta que o conteúdo seja adequado, respeitando direitos autorais e
+          evitando material explícito, incluindo sexual, violento ou impróprio.
+        </AlertDescription>
+      </Alert>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -295,7 +322,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                     ) : (
                       <div>
                         <UploadDropzone
-                          className="bg-zinc-100 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-400"
+                          className="dark:bg-slate-800 ut-label:text-lg ut-allowed-content:ut-uploading:text-red-300"
                           endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             console.log("Image uploaded: ", res[0].url);
@@ -324,6 +351,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Nome do painel"
                       {...field}

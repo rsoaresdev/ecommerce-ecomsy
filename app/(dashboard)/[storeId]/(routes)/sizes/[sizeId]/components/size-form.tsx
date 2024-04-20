@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { type Size } from "@prisma/client";
-import { Trash, Undo2 } from "lucide-react";
+import { Ruler, Trash, Undo2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -151,28 +152,51 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        <Button
-          onClick={() => {
-            router.push(`/${params.storeId}/sizes`);
-          }}
-        >
-          <Undo2 className="mr-2 h-4 w-4" />
-          Voltar
-        </Button>
-        {initialData && (
+        <div className="flex items-center">
           <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
+            className="mx-2"
             onClick={() => {
-              setOpenDelete(true);
+              router.push(`/${params.storeId}/sizes`);
             }}
           >
-            <Trash className="h-4 w-4" />
+            <Undo2 className="mr-2 h-4 w-4" />
+            Voltar
           </Button>
-        )}
+          {initialData && (
+            <Button
+              disabled={loading}
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+              className="mr-2"
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
+
       <Separator />
+      <Alert>
+        <Ruler className="h-4 w-4" />
+        <AlertTitle>Guia de criação de Tamanhos</AlertTitle>
+        <AlertDescription>
+          Insira o nome do tamanho e a abreviatura correspondente.
+          <br />
+          Isso ajuda a garantir consistência e facilita a experiência de compra
+          dos seus clientes.
+          <blockquote className="p-4 my-4 border-s-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">
+            <p className="font-medium leading-relaxed text-gray-900 dark:text-white">
+              <b>Nome:</b> Pequeno
+              <br />
+              <b>Abreviatura:</b> S
+            </p>
+          </blockquote>
+        </AlertDescription>
+      </Alert>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -187,6 +211,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Nome do tamanho"
                       {...field}
@@ -201,9 +226,10 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>Abreviatura</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Abreviatura do tamanho"
                       {...field}

@@ -4,16 +4,19 @@ import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { type Color } from "@prisma/client";
-import { Trash, Undo2 } from "lucide-react";
+import { Palette, Trash, Undo2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
+import { Hue, Saturation, useColor } from "react-color-palette";
+import "react-color-palette/css";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -48,14 +51,11 @@ const formSchema = z.object({
     .refine((value) => value.trim() === value, {
       message: "Texto não pode conter espaços em branco no início ou no final",
     }),
-  value: z
-    .string()
-    .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
-      message: "Texto deve conter um código HEX válido (#add6e8)",
-    })
-    .refine((value) => value.trim() === value, {
-      message: "Texto não pode conter espaços em branco no início ou no final",
+  value: z.object({
+    hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
+      message: "Texto deve conter um código HEX válido",
     }),
+  }),
 });
 
 type ColorFormValues = z.infer<typeof formSchema>;
@@ -71,6 +71,13 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [color, setColor] = useColor(initialData?.value ?? "#FFF");
+
+  const handleColorChange = (newColor: any) => {
+    setColor(newColor);
+    form.setValue("value", newColor);
+  };
+
   const title = initialData ? "Editar cor" : "Criar cor";
   const description = initialData ? "Editar uma cor" : "Criar uma nova cor";
   const toastMessageSuccess = initialData
@@ -81,12 +88,22 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
     : "Algo correu mal ao criar a cor!";
   const action = initialData ? "Guardar alterações" : "Criar";
 
+  const defaultValues = initialData
+    ? {
+        name: initialData.name || "",
+        value:
+          typeof initialData.value === "string"
+            ? { hex: initialData.value }
+            : { hex: "" },
+      }
+    : {
+        name: "",
+        value: { hex: "" },
+      };
+
   const form = useForm<ColorFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      name: "",
-      value: "",
-    },
+    defaultValues: defaultValues,
   });
 
   const onSubmit = async (data: ColorFormValues) => {
@@ -99,7 +116,11 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
 
       const method = initialData ? axios.patch : axios.post;
 
-      await method(endpoint, data);
+      // Modify the data object to send only the hexadecimal value of the color
+      const hexValue = color.hex; // Gets the hexadecimal value of the current color
+      const newData = { ...data, value: hexValue }; // Updates the value in the date object
+
+      await method(endpoint, newData);
 
       router.push(`/${params.storeId}/colors`);
       router.refresh();
@@ -147,34 +168,46 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        <Button
-          onClick={() => {
-            router.push(`/${params.storeId}/colors`);
-          }}
-        >
-          <Undo2 className="mr-2 h-4 w-4" />
-          Voltar
-        </Button>
-        {initialData && (
+        <div className="flex items-center">
           <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
+            className="mx-2"
             onClick={() => {
-              setOpenDelete(true);
+              router.push(`/${params.storeId}/colors`);
             }}
           >
-            <Trash className="h-4 w-4" />
+            <Undo2 className="mr-2 h-4 w-4" />
+            Voltar
           </Button>
-        )}
+          {initialData && (
+            <Button
+              disabled={loading}
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
       <Separator />
+      <Alert>
+        <Palette className="h-4 w-4" />
+        <AlertTitle>Guia de criação de Cores</AlertTitle>
+        <AlertDescription>
+          Crie cores ilimitadas! Insira o nome da cor e escolha na paleta a cor
+          perfeita para destacar os seus produtos.
+        </AlertDescription>
+      </Alert>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="space-y-8 w-1/2"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -183,6 +216,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       disabled={loading}
                       placeholder="Nome da cor"
                       {...field}
@@ -197,18 +231,16 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>Cor</FormLabel>
                   <FormControl>
-                    <div className="flex items-center gap-x-4">
-                      <Input
-                        disabled={loading}
-                        placeholder="Código hexadecimal"
-                        {...field}
+                    <div className="flex flex-col items-center">
+                      <Saturation
+                        height={300}
+                        color={color}
+                        onChange={handleColorChange}
                       />
-                      <div
-                        className="border p-4 rounded-full"
-                        style={{ backgroundColor: field.value }}
-                      />
+                      <div className="my-2">{/* Space div */}</div>
+                      <Hue color={color} onChange={handleColorChange} />
                     </div>
                   </FormControl>
                   <FormMessage />
