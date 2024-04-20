@@ -7,7 +7,7 @@ export default function HeaderNavbar() {
   return (
     <Link className="flex items-center mr-6 lg:flex" href="/">
       <Image
-        src={"http://ecomsy.site/logo.png"}
+        src={"https://ecomsy.site/logo.png"}
         alt="ecomsy logo"
         width={20}
         height={31}
