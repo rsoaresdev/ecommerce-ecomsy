@@ -6,7 +6,12 @@ import { useParams } from "next/navigation";
 import { ScrollText, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
+import {
+  SheetTrigger,
+  SheetContent,
+  Sheet,
+  SheetClose,
+} from "@/components/ui/sheet";
 import ButtonsNavBar from "@/components/navbar/buttons-navbar";
 
 interface NavigationComponent {
@@ -63,13 +68,15 @@ export default function MainNav() {
         <SheetContent side="left">
           <div className="grid gap-2 py-6">
             {components.map((component) => (
-              <Link
-                key={component.title}
-                className="flex w-full items-center py-2 text-lg font-semibold"
-                href={`/${params.storeId}/${component.href}`}
-              >
-                {component.title}
-              </Link>
+              <SheetClose asChild key={component.title}>
+                <Link
+                  key={component.title}
+                  className="flex w-full items-center py-2 text-lg font-semibold"
+                  href={`/${params.storeId}/${component.href}`}
+                >
+                  {component.title}
+                </Link>
+              </SheetClose>
             ))}
           </div>
         </SheetContent>

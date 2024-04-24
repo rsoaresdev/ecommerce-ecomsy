@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function HeaderNavbar() {
   return (
-    <Link className="flex items-center mr-6 lg:flex" href="/">
+    <Link className="hidden sm:flex items-center mr-6" href="/">
       <Image
         src={"https://ecomsy.site/logo.png"}
         alt="ecomsy logo"

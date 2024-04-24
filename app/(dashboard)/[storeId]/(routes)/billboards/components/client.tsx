@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
 
 import { type BillboardColumn, columns } from "./columns";
 
@@ -31,18 +30,12 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
             router.push(`/${params.storeId}/billboards/new`);
           }}
         >
-          <Plus className="mr-2 h-4 w-4" />
-          Adicionar novo
+          <Plus className="mr-0 sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:block">Adicionar novo</span>
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="label" columns={columns} data={data} />
-      <Heading
-        title="API"
-        description="Rotas da API para paineis publicitários"
-      />
-      <Separator />
-      <ApiList entityName="billboards" entityIdName="billboardId" />
     </>
   );
 };

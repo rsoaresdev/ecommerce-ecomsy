@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
 
 import { type CategoryColumn, columns } from "./columns";
 
@@ -31,15 +30,12 @@ export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
             router.push(`/${params.storeId}/categories/new`);
           }}
         >
-          <Plus className="mr-2 h-4 w-4" />
-          Adicionar nova
+          <Plus className="mr-0 sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:block">Adicionar nova</span>
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="API" description="Rotas da API para categorias" />
-      <Separator />
-      <ApiList entityName="categories" entityIdName="categoryId" />
     </>
   );
 };
