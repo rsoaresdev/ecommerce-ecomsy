@@ -14,6 +14,8 @@ const translations = {
   locale: "pt-PT",
   socialButtonsBlockButton: "Continuar com {{provider|titleize}}",
   dividerText: "ou",
+  formFieldError__matchingPasswords: "Palavras-passe coincidem.",
+  formFieldError__notMatchingPasswords: "Palavras-passe não coincidem.",
   formFieldLabel__emailAddress: "Insira o seu e-mail",
   formFieldLabel__emailAddresses: "Endereços de e-mail",
   formFieldLabel__phoneNumber: "Telemóvel",
@@ -244,15 +246,26 @@ const translations = {
   },
   userProfile: {
     mobileButton__menu: "Menu",
+    navbar: {
+      account: "Perfil",
+      description: "Configure os dados da sua conta.",
+      security: "Segurança",
+      title: "Conta",
+    },
+    formButtonPrimary__add: "Adicionar",
     formButtonPrimary__continue: "Continuar",
-    formButtonPrimary__finish: "Finalizar",
+    formButtonPrimary__finish: "Terminar",
+    formButtonPrimary__remove: "Remover",
+    formButtonPrimary__save: "Guardar",
     formButtonReset: "Cancelar",
+
     start: {
       headerTitle__account: "Conta",
       headerTitle__security: "Segurança",
       headerSubtitle__account: "Configurar as informações da conta",
       headerSubtitle__security: "Configurar as preferências de segurança",
       profileSection: {
+        primaryButton: "Atualizar perfil",
         title: "Perfil",
       },
       usernameSection: {
@@ -316,7 +329,8 @@ const translations = {
       },
       passwordSection: {
         title: "Palavra-passe",
-        primaryButton__changePassword: "Trocar palavra-passe",
+        primaryButton__changePassword: "Atualizar palavra-passe",
+        primaryButton__updatePassword: "Atualizar palavra-passe",
         primaryButton__setPassword: "Definir palavra-passe",
       },
       mfaSection: {
@@ -370,7 +384,7 @@ const translations = {
         destructiveAction: "Remover carteira",
       },
       dangerSection: {
-        title: "Perigo",
+        title: "Atenção!",
         deleteAccountButton: "Excluir Conta",
         deleteAccountTitle: "Excluir Conta",
         deleteAccountDescription:
@@ -389,6 +403,7 @@ const translations = {
       readonly:
         "As informações do perfil foram fornecidas pela conexão corporativa e não podem ser editadas.",
       successMessage: "O perfil foi atualizado.",
+      title: "Atualizar perfil",
     },
     usernamePage: {
       title: "Atualizar nome de utilizador",
@@ -398,7 +413,7 @@ const translations = {
       title: "Adicionar e-mail",
       emailCode: {
         formHint:
-          "Um e-mail contendo um código de verificação será enviado para este endereço de e-mail.",
+          "Será enviado um código de verificação para este endereço de e-mail.",
         formTitle: "Código de verificação",
         formSubtitle:
           "Insira o código de verificação enviado para {{identifier}}",
@@ -407,7 +422,7 @@ const translations = {
       },
       emailLink: {
         formHint:
-          "Um e-mail contendo um link de verificação será enviado para este endereço de e-mail.",
+          "Será enviado um link de verificação para este endereço de e-mail.",
         formTitle: "Link de verificação",
         formSubtitle:
           "Clique no link de verificação enviado para {{identifier}}",
@@ -465,14 +480,16 @@ const translations = {
       },
     },
     passwordPage: {
-      title: "Defina a palavra-passe",
-      changePasswordTitle: "Trocar palavra-passe",
+      checkboxInfoText__signOutOfOtherSessions:
+        "Recomenda-se que termine a sessão em todos os outros dispositivos que possam ter utilizado a sua palavra-passe antiga.",
       readonly:
         "A sua palavra-passe não pode ser editada porque só pode fazer login por meio da conexão da empresa.",
       successMessage: "A sua palavra-passe foi guardada.",
       changePasswordSuccessMessage: "A sua palavra-passe foi atualizada.",
       sessionsSignedOutSuccessMessage:
         "Todos os outros dispositivos foram desconectados.",
+      title__set: "Definir palavra-passe",
+      title__update: "Atualizar palavra-passe",
     },
     mfaPage: {
       title: "Adicione verificação de duas etapas",

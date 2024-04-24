@@ -35,6 +35,10 @@ export default function MainNav() {
       icon: <Settings className="h-5 w-5" />,
     },
     {
+      title: "Pedidos",
+      href: `orders`,
+    },
+    {
       title: "Produtos",
       href: `products`,
     },
